@@ -171,17 +171,32 @@ ipcMain.handle('check-binary', () => {
     let hasFfmpeg = false;
     let hasFfprobe = false;
 
-    try {
-        const checkCmd = process.platform === 'win32' ? 'where' : 'which';
-        execSync(`${checkCmd} ffmpeg`, { stdio: 'ignore' });
-        hasFfmpeg = true;
-    } catch(e) {}
+    const ffmpegFallbackPaths = process.platform === 'win32' ? [
+        'C:\\ffmpeg\\bin',
+        'C:\\ffmpeg',
+        path.join(app.getAppPath(), 'ffmpeg'),
+        path.join(path.dirname(app.getPath('exe')), 'ffmpeg'),
+    ] : [];
 
-    try {
-        const checkCmd = process.platform === 'win32' ? 'where' : 'which';
-        execSync(`${checkCmd} ffprobe`, { stdio: 'ignore' });
-        hasFfprobe = true;
-    } catch(e) {}
+    function isFfmpegAvailable(name) {
+        try {
+            const checkCmd = process.platform === 'win32' ? 'where' : 'which';
+            execSync(`${checkCmd} ${name}`, { stdio: 'ignore' });
+            return true;
+        } catch(e) {
+            const ext = process.platform === 'win32' ? '.exe' : '';
+            for (const dir of ffmpegFallbackPaths) {
+                if (fs.existsSync(path.join(dir, `${name}${ext}`))) {
+                    process.env.PATH = `${dir}${path.delimiter}${process.env.PATH}`;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    hasFfmpeg = isFfmpegAvailable('ffmpeg');
+    hasFfprobe = isFfmpegAvailable('ffprobe');
 
     return {
         hasBinary,
