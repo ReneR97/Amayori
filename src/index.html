@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amayori - Domestika Course Downloader</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span class="brand-name">Amayori</span>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" id="nav-dashboard" data-tab="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+                        <rect x="3" y="3" width="7" height="9" rx="1"/>
+                        <rect x="14" y="3" width="7" height="5" rx="1"/>
+                        <rect x="14" y="12" width="7" height="9" rx="1"/>
+                        <rect x="3" y="16" width="7" height="5" rx="1"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-btn" id="nav-courses" data-tab="courses">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    <span>Scrape & Download</span>
+                </button>
+                <button class="nav-btn" id="nav-library" data-tab="library">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>My Library</span>
+                </button>
+                <button class="nav-btn" id="nav-settings" data-tab="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Settings</span>
+                </button>
+                <button class="nav-btn" id="nav-help" data-tab="help">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <span>Help</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="connection-status" id="auth-status-indicator">
+                    <span class="status-dot offline"></span>
+                    <span class="status-text">Not Authenticated</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- HEADER -->
+            <header class="content-header">
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle">Welcome back to Amayori. Manage your courses and downloads.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-icon-only" id="btn-show-terminal" title="Toggle System Log">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px;">
+                            <polyline points="4 17 10 11 4 5"/>
+                            <line x1="12" y1="19" x2="20" y2="19"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- TABS PANELS -->
+            <div class="tab-panels">
+                
+                <!-- DASHBOARD TAB -->
+                <section class="tab-panel active" id="panel-dashboard">
+                    <div class="grid-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="stat-icon">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="stat-downloading-count">0</h3>
+                                <p>Active Downloads</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper green">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="stat-icon">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="stat-completed-count">0</h3>
+                                <p>Courses Downloaded</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper purple">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="stat-icon">
+                                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                                    <line x1="6" y1="6" x2="6.01" y2="6"/>
+                                    <line x1="6" y1="18" x2="6.01" y2="18"/>
+                                </svg>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="stat-binary-status">Checking...</h3>
+                                <p>N_m3u8DL-RE Engine</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-body">
+                        <div class="card flex-1">
+                            <div class="card-header">
+                                <h2>System Core Status</h2>
+                            </div>
+                            <div class="system-status-list">
+                                <div class="system-status-item">
+                                    <span class="status-name">N_m3u8DL-RE Downloader</span>
+                                    <span class="badge badge-warning" id="sys-binary-badge">Checking</span>
+                                </div>
+                                <div class="system-status-item">
+                                    <span class="status-name">FFmpeg Engine</span>
+                                    <span class="badge badge-warning" id="sys-ffmpeg-badge">Checking</span>
+                                </div>
+                                <div class="system-status-item">
+                                    <span class="status-name">FFprobe Analyzer</span>
+                                    <span class="badge badge-warning" id="sys-ffprobe-badge">Checking</span>
+                                </div>
+                            </div>
+                            <div class="action-bar" style="margin-top: 20px;">
+                                <button class="btn btn-primary" id="btn-fix-binary" style="display:none;">Install N_m3u8DL-RE</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card flex-1">
+                            <div class="card-header">
+                                <h2>Quick Actions</h2>
+                            </div>
+                            <div class="quick-actions-grid">
+                                <button class="quick-action-btn" id="qa-goto-scrape">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 5v14M5 12h14"/>
+                                    </svg>
+                                    <span>Scrape New Course</span>
+                                </button>
+                                <button class="quick-action-btn" id="qa-goto-library">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                    </svg>
+                                    <span>Browse Local Library</span>
+                                </button>
+                                <button class="quick-action-btn" id="qa-trigger-login">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>
+                                    </svg>
+                                    <span>Authenticate Login</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COURSES SCRAPING TAB -->
+                <section class="tab-panel" id="panel-courses">
+                    <div class="card">
+                        <div class="input-group">
+                            <label for="course-url-input">Domestika Course URL</label>
+                            <div class="input-with-action">
+                                <input type="url" id="course-url-input" placeholder="https://www.domestika.org/en/courses/XXXX-name/course">
+                                <button class="btn btn-primary" id="btn-fetch-course">Fetch Lessons</button>
+                            </div>
+                            <p class="input-hint">URL must end with "/course". Example: https://www.domestika.org/en/courses/3086-creating-animated-stories-with-after-effects/course</p>
+                        </div>
+                    </div>
+
+                    <div id="scraping-spinner" class="spinner-container hidden">
+                        <div class="spinner"></div>
+                        <p>Scraping course metadata... This may take a minute.</p>
+                    </div>
+
+                    <!-- Scraped Course Panel (Loaded dynamically) -->
+                    <div id="scraped-course-container" class="hidden">
+                        <div class="course-detail-card card">
+                            <div class="course-meta">
+                                <div class="course-info">
+                                    <h2 id="course-title-lbl">Course Title</h2>
+                                    <p id="course-lessons-count-lbl">0 Lessons detected</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="download-workspace-grid">
+                            <!-- Lessons list -->
+                            <div class="card flex-2 lessons-selection-card">
+                                <div class="card-header list-action-header">
+                                    <h2>Lessons & Chapters</h2>
+                                    <div class="header-checkboxes-actions">
+                                        <button class="btn btn-link" id="btn-select-all-lessons">Select All</button>
+                                        <button class="btn btn-link" id="btn-deselect-all-lessons">Clear All</button>
+                                    </div>
+                                </div>
+                                <div class="lessons-list" id="lessons-list-container">
+                                    <!-- Populated in JS -->
+                                </div>
+                            </div>
+
+                            <!-- Config panel -->
+                            <div class="card flex-1">
+                                <div class="card-header">
+                                    <h2>Download Config</h2>
+                                </div>
+                                <div class="form-group">
+                                    <label>Subtitle Languages</label>
+                                    <div class="subtitles-selection-grid">
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="en" checked>
+                                            <span class="checkmark"></span> English (en)
+                                        </label>
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="es">
+                                            <span class="checkmark"></span> Spanish (es)
+                                        </label>
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="pt">
+                                            <span class="checkmark"></span> Portuguese (pt)
+                                        </label>
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="de">
+                                            <span class="checkmark"></span> German (de)
+                                        </label>
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="fr">
+                                            <span class="checkmark"></span> French (fr)
+                                        </label>
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="it">
+                                            <span class="checkmark"></span> Italian (it)
+                                        </label>
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" name="sub-lang" value="all">
+                                            <span class="checkmark"></span> All Available
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="chk-transcode">
+                                        <span class="switch-slider"></span>
+                                        <span class="switch-label">Transcode to H.265 (HEVC)</span>
+                                    </label>
+                                    <p class="input-hint">Reduces video size significantly with similar quality.</p>
+                                </div>
+
+                                <div class="form-group" id="nvenc-group" style="display:none;">
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="chk-nvenc">
+                                        <span class="switch-slider"></span>
+                                        <span class="switch-label">Enable NVIDIA GPU (NVENC)</span>
+                                    </label>
+                                    <p class="input-hint">Fast transcoding using your NVIDIA Graphic Card.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="concurrency-range">Parallel Threads: <span id="concurrency-lbl">3</span></label>
+                                    <input type="range" id="concurrency-range" min="1" max="6" value="3">
+                                    <p class="input-hint">How many videos download concurrently.</p>
+                                </div>
+
+                                <button class="btn btn-success btn-large btn-block" id="btn-start-download-queue">Start Downloads</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Downloads Queue Panel (Shown when download is active) -->
+                    <div id="active-queue-container" class="card hidden" style="margin-top: 25px;">
+                        <div class="card-header list-action-header">
+                            <div>
+                                <h2>Download Queue Progress</h2>
+                                <p id="queue-status-text">Processing...</p>
+                            </div>
+                            <button class="btn btn-danger" id="btn-stop-download-queue">Cancel Downloads</button>
+                        </div>
+                        <div class="progress-bar-wrapper overall-progress-container">
+                            <span class="progress-bar-title">Overall Progress</span>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="overall-progress-bar" style="width: 0%;"></div>
+                            </div>
+                            <span class="progress-percent" id="overall-progress-percent">0%</span>
+                        </div>
+                        <div class="queue-list" id="queue-items-container">
+                            <!-- Populated in JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LIBRARY TAB -->
+                <section class="tab-panel" id="panel-library">
+                    <div class="card library-controls">
+                        <button class="btn btn-secondary" id="btn-refresh-library">Refresh Library</button>
+                        <button class="btn btn-link" id="btn-open-download-dir">Open Folder in Explorer</button>
+                    </div>
+                    <div id="library-empty" class="library-empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <h3>No downloaded courses found</h3>
+                        <p>Completed course files will show up here.</p>
+                    </div>
+                    <div class="library-tree" id="library-container">
+                        <!-- Populated in JS -->
+                    </div>
+                </section>
+
+                <!-- SETTINGS TAB -->
+                <section class="tab-panel" id="panel-settings">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Authentication Credentials</h2>
+                        </div>
+                        <div class="settings-auth-bar" style="display:flex; gap: 15px; align-items: center; margin-bottom: 20px;">
+                            <button class="btn btn-primary" id="btn-popup-login">Login Automatically</button>
+                            <span class="or-separator">or fill in parameters manually below</span>
+                            <button class="btn btn-danger btn-secondary" id="btn-clear-auth" style="display:none;">Clear Authentication</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="cookie-session-input">_domestika_session Cookie Value</label>
+                            <input type="text" id="cookie-session-input" placeholder="Paste _domestika_session cookie value here...">
+                        </div>
+                        <div class="form-group">
+                            <label for="credentials-input">_credentials_ Cookie Value</label>
+                            <textarea id="credentials-input" rows="3" placeholder="Paste _credentials_ cookie value here..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 25px;">
+                        <div class="card-header">
+                            <h2>Application Folders</h2>
+                        </div>
+                        <div class="form-group">
+                            <label for="download-folder-input">Download Folder</label>
+                            <div class="input-with-action">
+                                <input type="text" id="download-folder-input" readonly>
+                                <button class="btn btn-secondary" id="btn-browse-folder">Choose Folder</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 25px;">
+                        <div class="card-header">
+                            <h2>Transcoding Engines</h2>
+                        </div>
+                        <div class="system-status-list">
+                            <div class="system-status-item">
+                                <div>
+                                    <div class="status-name">N_m3u8DL-RE Engine</div>
+                                    <div class="input-hint" id="binary-engine-path">Location: Not Installed</div>
+                                </div>
+                                <button class="btn btn-secondary" id="btn-install-binary-manual">Install / Update</button>
+                            </div>
+                            <div class="system-status-item">
+                                <div>
+                                    <div class="status-name">FFmpeg Transcoder</div>
+                                    <div class="input-hint" id="ffmpeg-path-lbl">PATH: Not Found</div>
+                                </div>
+                                <span class="badge" id="ffmpeg-status-badge">Missing</span>
+                            </div>
+                        </div>
+                        <p class="input-hint" style="margin-top: 15px;">Note: FFmpeg and FFprobe must be installed on your computer and registered in your system PATH environment variable for transcoding to function.</p>
+                    </div>
+
+                    <div class="settings-save-bar" style="margin-top: 25px;">
+                        <button class="btn btn-success btn-large" id="btn-save-settings">Save All Settings</button>
+                        <span class="settings-save-indicator" id="settings-save-success-indicator">Settings Saved!</span>
+                    </div>
+                </section>
+
+                <!-- HELP TAB -->
+                <section class="tab-panel" id="panel-help">
+                    <div class="card">
+                        <h2>Quick Start Guide</h2>
+                        <ol class="help-steps">
+                            <li><strong>Authenticate:</strong> Go to the <strong>Settings</strong> tab, click the <em>"Login Automatically"</em> button, and log into your Domestika account in the popup window. Alternatively, copy-paste your cookie values manually.</li>
+                            <li><strong>Configure Download Path:</strong> Choose your desired folder where you want courses to be saved in Settings.</li>
+                            <li><strong>Check Dependencies:</strong> Ensure the `N_m3u8DL-RE` engine displays as "Installed" under Settings. If not, click the install button. Make sure FFmpeg is installed on your computer (needed for processing and transcoding).</li>
+                            <li><strong>Fetch Course:</strong> Go to <strong>Scrape & Download</strong>, paste the link of any course you purchased or acquired through your Plus subscription, and click <em>"Fetch Lessons"</em>.</li>
+                            <li><strong>Download:</strong> Check/uncheck the lessons you want to download, pick your subtitle languages, toggle HEVC/transcoding preferences, and click <em>"Start Downloads"</em>.</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="card" style="margin-top: 25px;">
+                        <h2>How to get Cookies Manually</h2>
+                        <p>If the automatic login doesn't work for you, you can supply your credentials using cookies from your web browser:</p>
+                        <ul class="help-list">
+                            <li>Install the <strong>Cookie-Editor</strong> extension in Google Chrome or Firefox.</li>
+                            <li>Log in to the <a href="https://www.domestika.org" target="_blank" class="external-link">Domestika Website</a>.</li>
+                            <li>Open the extension and find the cookie named <code>_domestika_session</code>. Copy its **Value** and paste it into the Settings input.</li>
+                            <li>Find the cookie named <code>_credentials_</code>. Copy its **Value** (which is a long string of numbers/letters) and paste it into the Credentials input.</li>
+                            <li>Click **Save Settings**.</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SYSTEM LOG DRAWER (Hidden by default) -->
+            <footer class="log-drawer hidden" id="terminal-drawer">
+                <div class="drawer-header">
+                    <h3>System Log</h3>
+                    <div class="drawer-actions">
+                        <button class="btn btn-link btn-small" id="btn-clear-logs">Clear Logs</button>
+                        <button class="btn-close" id="btn-close-terminal">&times;</button>
+                    </div>
+                </div>
+                <div class="drawer-content" id="log-output-container">
+                    <div class="log-line system">Amayori active. System ready.</div>
+                </div>
+            </footer>
+        </main>
+    </div>
+    
+    <!-- Toast Notification Container -->
+    <div id="toast-container" aria-live="polite"></div>
+    
+    <script src="renderer.js"></script>
+</body>
+</html>

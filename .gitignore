@@ -1,0 +1,31 @@
+# Dependency directories
+node_modules/
+
+# Production / Package outputs
+release/
+dist/
+
+# Electron-builder cache
+.tmp/
+.electron-builder/
+
+# Temporary / Local binaries and downloaded tools
+N_m3u8DL-RE
+N_m3u8DL-RE.exe
+ffmpeg
+ffmpeg.exe
+ffprobe
+ffprobe.exe
+*.zip
+*.tar.gz
+*.tgz
+
+# OS / IDE generated files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local test configurations / logs
+settings.json
+*.log

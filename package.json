@@ -1,0 +1,45 @@
+{
+  "name": "amayori-downloader",
+  "version": "1.0.0",
+  "description": "Domestika Course Downloader Desktop App",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "tar": "^6.2.1"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "electron": "^28.2.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.rene.amayori-downloader",
+    "productName": "Amayori",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable"
+    },
+    "mac": {
+      "target": [
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "tar.gz"
+      ]
+    }
+  }
+}
